@@ -575,6 +575,12 @@ jobs:
     - name: Checks an application existance in FOD and Creates it if not exist
       id: FODAppManagement
       run: |
+          echo "${{ secrets.FOD_API_URL }}"
+          echo "${{ secrets.FOD_BEARER_TOKEN }}"
+          echo "${{ secrets.FOD_API_BASE_URL }}"
+          echo "${{ secrets.FOD_TENANT }}" 
+          echo "${{ secrets.FOD_USER }}"  
+          
           # Prints the repository name with branch name
           echo "This workflow has been triggered at ${Repo_Name} in ${GITHUB_REF##*/} branch"
           
