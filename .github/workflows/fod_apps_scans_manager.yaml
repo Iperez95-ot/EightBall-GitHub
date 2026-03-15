@@ -133,10 +133,10 @@ jobs:
     # Saves the data of the technology stack based on the repository language 
     # to be used in the sast scan options, sast scan build packages and java configuration steps.
     outputs:
-      Technology_Stack_ID: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack_id }}
-      Technology_Stack: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack }}
-      Single_Version_Language_Level_ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}
-      Single_Version_Language_Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}
+      #Technology_Stack_ID: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack_id }}
+      #Technology_Stack: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack }}
+      #Single_Version_Language_Level_ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}
+      #Single_Version_Language_Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}
       Multi_Version_Language_Level_ID: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}
       Multi_Version_Language_Level: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level }}
       Scan_Java_Version: ${{ steps.DefinesJavaVersionFortifyTasks.outputs.scan_java_version }}
@@ -176,238 +176,44 @@ jobs:
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
     
-    # Defines FOD Application Technology Stack based on the language of the repository to be used for FOD SAST Scan Options
-    - name: Defines FOD Application Technology Stack
-      id: DefinesFODAppTechStack
-      run: |
-          echo "Proceeding to define the technology stack of the FOD Application..."
-          
-          # Checks if the repositroy language is not a multi version language
-          if [[ $Repo_Language != 'Java' && $Repo_Language != 'Kotlin' && $Repo_Language != 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
-            echo "The repository language is not a multi version language"
-
-            echo "Language Level and Language Level ID have been saved"
-            
-            # Sets language level id variable to null because the repository language is not a multi version language
-            echo "::set-output name=language_level_id::null"
-            
-            # Sets language level variable to null because the repository language is not a multi version language
-            echo "::set-output name=language_level::null"
-      
-            # Switchs between the non multi version languages and assigns technology stack id and technology stack values based on the repository language
-            case "$Repo_Language" in
-              "ABAP")
-                echo "The Technology Stack from the repository is ABAP"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 2 if the repository is build in ABAP language
-                echo "::set-output name=tech_stack_id::2"
-                
-                # Sets technology stack variable dynamically to ABAP if the repository is build in ABAP language
-                echo "::set-output name=tech_stack::ABAP"
-                ;;
-              "Apex")
-                echo "The Technology Stack from the repository is Apex/VisualForce"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 21 if the repository is build in Apex language
-                echo "::set-output name=tech_stack_id::21"
-                
-                # Sets technology stack variable dynamically to Apex/Visualforce if the repository is build in Apex language
-                echo "::set-output name=tech_stack::Apex/Visualforce"
-                ;;
-              "ColdFusion")
-                echo "The Technology Stack from the repository is ColdFusion"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 5 if the repository is build in ColdFusion language
-                echo "::set-output name=tech_stack_id::5"
-              
-                # Sets technology stack variable dynamically to CFML if the repository is build in ColdFusion language
-                echo "::set-output name=tech_stack::CFML"
-                ;;
-              "COBOL")
-                echo "The Technology Stack from the repository is COBOL"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 6 if the repository is build in ColdFusion language
-                echo "::set-output name=tech_stack_id::6"
-                
-                # Sets technology stack variable dynamically to COBOL if the repository is build in ColdFusion language
-                echo "::set-output name=tech_stack::COBOL"
-                ;;
-              "Dart")
-                echo "The Technology Stack from the repository is Dart"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 29 if the repository is build in Dart language
-                echo "::set-output name=tech_stack_id::29"
-                
-                # Sets technology stack variable dynamically to Dart/Flutter if the repository is build in Dart language
-                echo "::set-output name=tech_stack::Dart/Flutter"
-                ;;
-              "Go")
-                echo "The Technology Stack from the repository is Go"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 22 if the repository is build in Go language
-                echo "::set-output name=tech_stack_id::22"
-                
-                # Sets technology stack variable dynamically to Go if the repository is build in Go language
-                echo "::set-output name=tech_stack::Go"
-                ;;
-              "Dockerfile")
-                echo "The Technology Stack from the repository is Dockerfile"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 27 if the repository is build in Dockerfile language
-                echo "::set-output name=tech_stack_id::27"
-              
-                # Sets technology stack variable dynamically to Infrastructure-As-Code/Dockerfile if the repository is build in Dockerfile language
-                echo "::set-output name=tech_stack::Infrastructure-As-Code/Dockerfile"
-                ;;
-              "HTML" | "JavaScript" | "TypeScript")
-                echo "The Technology Stack from the repository is JS/TS/HTML"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 16 if the repository is build in JS or TS or HTML languages
-                echo "::set-output name=tech_stack_id::16"
-                
-                # Sets technology stack variable dynamically to JS/TS/HTML if the repository is build in JS or TS or HTML languages
-                echo "::set-output name=tech_stack::JS/TS/HTML"
-                ;;
-              "C" | "C++" | "Scala")
-                echo "The Technology Stack from the repository is MBS/C/C++/Scala"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 16 if the repository is build in MBS or C or C++ or Scala languages
-                echo "::set-output name=tech_stack_id::16"
-                
-                # Sets technology stack variable dynamically to MBS/C/C++/Scala if the repository is build in MBS or C or C++ or Scala languages
-                echo "::set-output name=tech_stack::MBS/C/C++/Scala"
-                ;;
-              "PHP")
-                echo "The Technology Stack from the repository is PHP"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 9 if the repository is build in PHP language
-                echo "::set-output name=tech_stack_id::9"
-                 
-                # Sets technology stack variable dynamically to PHP if the repository is build in PHP language
-                echo "::set-output name=tech_stack::PHP"
-                ;;
-              "Ruby")
-                echo "The Technology Stack from the repository is Ruby"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 17 if the repository is build in Ruby language
-                echo "::set-output name=tech_stack_id::17"
-              
-                # Sets technology stack variable dynamically to Ruby if the repository is build in Ruby language
-                echo "::set-output name=tech_stack::Ruby"
-                ;;
-              "Solidity")
-                echo "The Technology Stack from the repository is Solidity"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 31 if the repository is build in Solidity language
-                echo "::set-output name=tech_stack_id::31"
-              
-                # Sets technology stack variable dynamically to Solidity if the repository is build in Solidity language
-                echo "::set-output name=tech_stack::Solidity"
-                ;;
-              "Visual Basic 6.0")
-                echo "The Technology Stack from the repository is Visual Basic 6.0"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 11 if the repository is build in Visual Basic 6.0 language
-                echo "::set-output name=tech_stack_id::11"
-                
-                # Sets technology stack variable dynamically to VB6 if the repository is build in Visual Basic 6.0 language
-                echo "::set-output name=tech_stack::VB6"
-                ;;
-              "VBScript")
-                echo "The Technology Stack from the repository is Visual Basic Script"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 14 if the repository is build in Visual Basic Script language
-                echo "::set-output name=tech_stack_id::14"
-              
-                # Sets technology stack variable dynamically to VBScript if the repository is build in Visual Basic Script language
-                echo "::set-output name=tech_stack::VBScript"
-                ;;
-              *)
-                echo "Language not found on Fortify On Demand technology stack options"
-
-                exit 1  # Exit with a non-zero status code to indicate failure
-                ;;
-            esac
-          else
-            case "$Repo_Language" in
-              "Java" | "J2EE" | "Kotlin")
-                echo "The Technology Stack from the repository is $Repo_Language"
-
-                echo "Technology Stack and Technology Stack ID have been saved"
-                
-                # Sets technology stack id variable dynamically to 2 if the repository is built in Java language
-                echo "::set-output name=tech_stack_id::7"
-                
-                # Sets technology stack variable dynamically to JAVA/J2EE/Kotlin if the repository is built in Java language
-                echo "::set-output name=tech_stack::JAVA/J2EE/Kotlin"
-                ;;
-              "C#")
-                echo "The Technology Stack from the repository is .Net/.Net Core/ASP"
-
-                echo "Language Level, Technology Stack, Technology Stack ID and Language Level ID have been saved"
-            
-                # Sets technology stack id variable to 1 if the repository is build in Python language
-                echo "::set-output name=tech_stack_id::1"
-            
-                # Sets technology stack variable dynamically related to .NET if the repository is build in Python language
-                echo "::set-output name=tech_stack::.NET"
-            
-                # Sets language level id variable to 2 if the repository is build in Python language
-                echo "::set-output name=language_level_id::2"
-            
-                # Sets language level variable to 2.0 if the repository is build in Python language
-                echo "::set-output name=language_level::2.0"
-                ;;
-              "Python")
-                echo "The Technology Stack from the repository is Python"
-
-                echo "Technology Stack and Technology Stack ID has been saved"
-                
-                # Sets technology stack id variable dynamically to 5 if the repository is build in Python language
-                echo "::set-output name=tech_stack_id::5"
-              
-                # Sets technology stack variable dynamically to CFML if the repository is build in Python language
-                echo "::set-output name=tech_stack::CFML"
-                ;;
-              *)
-                echo "Language not found on Fortify On Demand technology stack options"
-
-                exit 1  # Exit with a non-zero status code to indicate failure
-                ;;
-            esac  
-          fi
-      env: 
-        # Environment variables for this step
-        Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
-        Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
+#    - name: Defines FOD Application Technology Stack
+#      id: DefinesFODAppTechStack
+#      run: |
+#          echo "Proceeding to define the technology stack of the FOD Application..."
+#
+#          # Checks if the repository language is not a multi version language
+#          if [[ $Repo_Language != 'Java' && $Repo_Language != 'Kotlin' && $Repo_Language != 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
+#            echo "The repository language is not a multi version language"
+#
+#            echo "Language Level and Language Level ID have been saved"
+#
+#            # Sets language level id variable to null
+#            echo "::set-output name=language_level_id::null"
+#
+#            # Sets language level variable to null
+#            echo "::set-output name=language_level::null"
+#
+#            case "$Repo_Language" in
+#              "ABAP")
+#                echo "The Technology Stack from the repository is ABAP"
+#                echo "::set-output name=tech_stack_id::2"
+#                echo "::set-output name=tech_stack::ABAP"
+#                ;;
+#              "Apex")
+#                echo "The Technology Stack from the repository is Apex/VisualForce"
+#                echo "::set-output name=tech_stack_id::21"
+#                echo "::set-output name=tech_stack::Apex/Visualforce"
+#                ;;
+#              *)
+#                echo "Language not found on Fortify On Demand technology stack options"
+#                exit 1
+#                ;;
+#            esac
+#          fi
+#
+#      env:
+#        Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
+#        Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
 
     # Defines the Java Version to be used for FOD SAST Scan Options
     - name: Defines Java Application Language Level and Language Level ID
@@ -517,35 +323,35 @@ jobs:
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
 
-    # Checks the Language Level and Level ID.
-    # If the repository language is a multi version language it will use the corresponding version of the technology stack
-    # based on the data from technology stack configuration step.
-    - name: Checks Language ID and Language Level of the FOD Application
-      id: LanguageLevelIDChecker
-      run: |
-          echo "Proceeding to check the Language Level and ID of the FOD Application..."
-         
-          # Checks if the repositroy language is not a multi version language
-          if [[ $Repo_Language != 'Java' && $Repo_Language != 'Kotlin' && $Repo_Language != 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
-            echo "Repository language is: $Repo_Language"
-
-            echo "Language Level and Language Level ID have been saved"
-            
-            echo "::set-output name=language_level_id::${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}"
-            
-            echo "::set-output name=language_level::${{ steps.DefinesFODAppTechStack.outputs.language_level }}"
-          else
-            echo "Repository language is: $Repo_Language"
-
-            echo "Language Level and Language Level ID have been saved"
-            
-            echo "::set-output name=language_level_id::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}"
-            
-            echo "::set-output name=language_level::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level }}"
-          fi
-      env: 
-        # Environment variables for this step
-        Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
+#    # Checks the Language Level and Level ID.
+#    # If the repository language is a multi version language it will use the corresponding version of the technology stack
+#    # based on the data from technology stack configuration step.
+#    - name: Checks Language ID and Language Level of the FOD Application
+#      id: LanguageLevelIDChecker
+#      run: |
+#          echo "Proceeding to check the Language Level and ID of the FOD Application..."
+#
+#          # Checks if the repository language is not a multi version language
+#          if [[ $Repo_Language != 'Java' && $Repo_Language != 'Kotlin' && $Repo_Language != 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
+#            echo "Repository language is: $Repo_Language"
+#
+#            echo "Language Level and Language Level ID have been saved"
+#
+#            #echo "::set-output name=language_level_id::${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}"
+#
+#            #echo "::set-output name=language_level::${{ steps.DefinesFODAppTechStack.outputs.language_level }}"
+#          else
+#            echo "Repository language is: $Repo_Language"
+#
+#            echo "Language Level and Language Level ID have been saved"
+#
+#            echo "::set-output name=language_level_id::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}"
+#
+#            echo "::set-output name=language_level::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level }}"
+#          fi
+#      env:
+#        # Environment variables for this step
+#        Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
       
   # FOD Application Management Job
   FOD-Application-Management:
@@ -574,13 +380,7 @@ jobs:
     #   Read fod_apps_scans_manager documentation for more details about how to update the values to be used in the JSON create application body.
     - name: Checks an application existance in FOD and Creates it if not exist
       id: FODAppManagement
-      run: |
-          echo "${{ secrets.FOD_API_URL }}"
-          echo "${{ secrets.FOD_BEARER_TOKEN }}"
-          echo "${{ secrets.FOD_API_BASE_URL }}"
-          echo "${{ secrets.FOD_TENANT }}" 
-          echo "${{ secrets.FOD_USER }}"  
-          
+      run: |         
           # Prints the repository name with branch name
           echo "This workflow has been triggered at ${Repo_Name} in ${GITHUB_REF##*/} branch"
           
@@ -868,8 +668,10 @@ jobs:
         FOD_EMAIL: "${{ secrets.FOD_EMAIL }}"
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         FOD_RELEASE_ID: ${{ needs.FOD-Application-Management.outputs.FOD_Release_ID }}
-        Technology_Stack_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack_ID }}
-        Technology_Stack: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack }}
+        Technology_Stack_ID: 32
+        Technology_Stack: Auto Detect
+        #Technology_Stack_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack_ID }}
+        #Technology_Stack: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack }}
         Language_Level_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.language_level_id }}
         Language_Level: ${{ needs.Repository-Technology-Stack-Management.outputs.language_level }}
           
